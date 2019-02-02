@@ -10,18 +10,8 @@ persons = {
 def all_users():
     if request.method == 'GET':
         arr = []
-
-        # if persons.get(username):
-        #     return username + " " + persons[username]
-        # else:
-        #     return "No comment!"
-        # for i in 
-        # arr.append(list(persons.keys()))
         for key, val in persons.items():
-            # temp = [key, value]
             arr.append(key + ": " + val)
-        # keys = list(persons.keys())
-        # vals = list(persons.values())
         return jsonify(arr, 200)
 
     if request.method == 'POST':
@@ -59,38 +49,6 @@ def spec_user(username):
 
         else:
             return jsonify(400)
-
-
-# @app.route('/user', methods=['POST', 'PUT', 'DELETE'])
-# def new_user():
-#     if request.method == 'POST':
-#         user = request.get_json()
-#         username = user.get("username")
-#         comment = user.get("comment")
-#         if username not in persons:
-#             persons[username] = comment
-#             return jsonify(comment, 200)
-#         else:
-#             return jsonify(400)
-
-#     if request.method == 'PUT':
-#         user = request.get_json()
-#         username = user.get("username")
-#         comment = user.get("comment")
-#         if username in persons:
-#             persons[username] = comment
-#             return jsonify(comment, 200)
-#         else:
-#             return jsonify(400)
-
-#     if request.method == 'DELETE':
-#         user = request.get_json()
-#         username = user.get("username")
-#         if username in persons:
-#             persons.pop(username)
-#             return jsonify(persons, 200)
-#         else:
-#             return jsonify(400)
 
 if __name__ == '__main__':
     app.run(port = '1600', debug=True)
