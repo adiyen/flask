@@ -1,41 +1,53 @@
 from flask import Flask, request, jsonify, render_template
 app = Flask(__name__)
 
-person = {"bob" : "good day to you!"}
+persons = {
+    "krishna": "hello",
+    "bob" : "good day to you!"
+}
 
 @app.route('/')
 def hello_world():
     return render_template('index.html')
 
-
-@app.route('/hello', methods=['GET'])
-def say_hello():
-    return jsonify('Hello!', 200)
-
-
-@app.route('/goodbye', methods=['GET'])
-def say_goodbye():
-    return 'Goodbye!'
-
-@app.route('/<username>')
+@app.route('/user/<username>', methods=['GET'])
 def username(username):
-    return "This is the username: " + username
+    if request.method == 'GET':
+        if persons.get(username):
+            return username + " " + persons[username]
+        else:
+            return "No comment!"
 
-# @app.route('/', methods = ['GET', 'POST'])
-# def comment():
-#     if request.method == 'POST':
-
-@app.route('/user', methods = ['POST'])
-def user():
-    if request.is_json:
+@app.route('/user', methods=['POST', 'PUT', 'DELETE'])
+def new_user():
+    if request.method == 'POST':
         user = request.get_json()
-        print(user['username'])
-        return jsonify("You always gotta return something!", 200)
-    else:
-        return jsonify("No payload was sent!", 400)
-    
+        username = user.get("username")
+        comment = user.get("comment")
+        if username not in persons:
+            persons[username] = comment
+            return jsonify(comment, 200)
+        else:
+            return jsonify(400)
 
-# POST -> /user := {user: coment}
+    if request.method == 'PUT':
+        user = request.get_json()
+        username = user.get("username")
+        comment = user.get("comment")
+        if username in persons:
+            persons[username] = comment
+            return jsonify(comment, 200)
+        else:
+            return jsonify(400)
+
+    if request.method == 'DELETE':
+        user = request.get_json()
+        username = user.get("username")
+        if username in persons:
+            persons.pop(username)
+            return jsonify(persons, 200)
+        else:
+            return jsonify(400)
 
 if __name__ == '__main__':
     app.run(debug=True)
