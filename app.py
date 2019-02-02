@@ -6,10 +6,6 @@ persons = {
     "bob" : "good day to you!"
 }
 
-@app.route('/')
-def hello_world():
-    return render_template('index.html')
-
 @app.route('/user/<username>', methods=['GET'])
 def username(username):
     if request.method == 'GET':
